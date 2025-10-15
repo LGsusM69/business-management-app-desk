@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.polibius.businessmanagementappdesk.controller.MainController">
+
+    <!-- Top Menu or Header goes here -->
+    <top>
+        <!-- We’ll add a MenuBar or toolbar later -->
+    </top>
+
+    <!-- Left Sidebar (optional) -->
+    <left>
+        <!-- Placeholder for navigation panel -->
+    </left>
+
+    <!-- Main content area -->
+    <center>
+        <!-- Placeholder dashboard or landing screen -->
+    </center>
+
+</BorderPane>
