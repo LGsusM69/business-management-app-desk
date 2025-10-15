@@ -1,6 +1,7 @@
 package com.polibius.businessmanagementappdesk;
 
 import com.polibius.businessmanagementappdesk.database.DBConnection;
+import com.polibius.businessmanagementappdesk.repository.UserRepository;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,6 +14,8 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         DBConnection.getConnection();
+        UserRepository.initializeTable();
+        UserRepository.insertDefaultAdmin();
         FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("fxml/login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         URL css = getClass().getResource("css/application.css");
