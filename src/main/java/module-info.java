@@ -2,6 +2,8 @@ module com.polibius.businessmanagementappdesk {
     requires javafx.controls;
     requires javafx.fxml;
     requires org.xerial.sqlitejdbc;
+    requires java.net.http;
+    requires com.fasterxml.jackson.databind;
 
 
     opens com.polibius.businessmanagementappdesk to javafx.fxml;

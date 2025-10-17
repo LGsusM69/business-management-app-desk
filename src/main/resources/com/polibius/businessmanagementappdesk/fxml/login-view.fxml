@@ -16,7 +16,7 @@
         AnchorPane.leftAnchor="0.0"
         AnchorPane.rightAnchor="0.0">
         <Label fx:id="sceneTitle" text="Login"/>
-        <TextField fx:id="usernameField" promptText="Username"/>
+        <TextField fx:id="emailField" promptText="Username"/>
         <PasswordField fx:id="passwordField" promptText="password"/>
         <Button text="Login" onAction="#onLoginButtonClick"/>
     </VBox>

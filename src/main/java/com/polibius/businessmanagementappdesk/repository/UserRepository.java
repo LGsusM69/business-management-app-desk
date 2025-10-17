@@ -9,45 +9,68 @@ public class UserRepository {
 
     public static void initializeTable() {
         String sql = """
-            CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                email TEXT NOT NULL UNIQUE,
-                username TEXT NOT NULL UNIQUE,
-                password_hash TEXT NOT NULL,
-                created_at TEXT DEFAULT CURRENT_TIMESTAMP
-            );
-        """;
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT NOT NULL UNIQUE,
+            username TEXT NOT NULL UNIQUE,
+            password_hash TEXT NOT NULL,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        );
+    """;
 
-        try(Connection conn = DBConnection.getConnection();
-            Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
-            System.out.println("Users table ready");
-        } catch(SQLException e) {
+        try {
+            Connection conn = DBConnection.getConnection();
+            try (Statement stmt = conn.createStatement()) {
+                stmt.execute(sql);
+                System.out.println("Users table ready");
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     public static void insertDefaultAdmin() {
         String checkQuery = "SELECT COUNT(*) FROM users";
         String insertQuery = "INSERT INTO users (email, username, password_hash) VALUES (?, ?, ?)";
 
-        try (Connection conn = DBConnection.getConnection();
-             Statement checkStmt = conn.createStatement();
-             ResultSet rs = checkStmt.executeQuery(checkQuery)) {
+        try {
+            Connection conn = DBConnection.getConnection();
 
-            if (rs.next() && rs.getInt(1) == 0) {
-                try (PreparedStatement insertStmt = conn.prepareStatement(insertQuery)) {
-                    insertStmt.setString(1, "admin@polibius.com");
-                    insertStmt.setString(2, "admin");
-                    insertStmt.setString(3, PasswordUtils.hashPassword("admin"));
-                    insertStmt.executeUpdate();
-                    System.out.println("Default admin user inserted.");
+            try (Statement checkStmt = conn.createStatement();
+                 ResultSet rs = checkStmt.executeQuery(checkQuery)) {
+
+                if (rs.next() && rs.getInt(1) == 0) {
+                    try (PreparedStatement insertStmt = conn.prepareStatement(insertQuery)) {
+                        insertStmt.setString(1, "admin@polibius.com");
+                        insertStmt.setString(2, "admin");
+                        insertStmt.setString(3, PasswordUtils.hashPassword("admin"));
+                        insertStmt.executeUpdate();
+                        System.out.println("Default admin user inserted.");
+                    }
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    public static String getPasswordHashByEmail(String email) {
+        String query = "SELECT password_hash FROM users WHERE email = ?";
+        try {
+            Connection conn = DBConnection.getConnection();
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, email);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    return rs.getString("password_hash");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }
